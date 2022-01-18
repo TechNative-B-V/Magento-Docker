@@ -6,6 +6,12 @@
   hosts: all
   become: true
 
+  vars_prompt:
+  - name: "create_partition"
+    prompt: "Do you want to create a partition (yes/no)?"
+    private: no
+
   roles:
     - role: docker_installer
     - role: make_partition
+      when: create_partition | bool
