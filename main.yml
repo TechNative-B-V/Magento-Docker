@@ -1,11 +1,11 @@
 ---
-# The main playbook from which the roles are started
-# Mischa van den Burg
+# The main magento playbook
+# Mischa van den Burg & Gino Kok
 
-- name: call roles
+- name: Containerize Magento
   hosts: all
   become: true
 
   roles:
-    - docker_installer
-    - make_partition
+    - role: docker_installer
+    - role: make_partition
