@@ -12,36 +12,36 @@
     - name: Cloning the repository
       git:
         repo: "{{ repository }}"
-        dest: "{{ root_directory }}"
+        dest: "{{ clone_location }}"
         version: "{{ version }}"
 
-    # # make sure we have the desired directories in the mount location
-    # - name: Make sure we have desired directories
-    #   file:
-    #     path: "{{ root_directory }}/{{ item }}"
-    #     state: directory
-    #     mode: "0755"  
-    #   with_items: "{{ dirNames }}"
+    # make sure we have the desired directories in the mount location
+    - name: Make sure we have desired directories
+      file:
+        path: "{{ root_directory }}/{{ item }}"
+        state: directory
+        mode: "0755"  
+      with_items: "{{ dirNames }}"
 
-    # # copy the config files to the machine
-    # - name: Copy the config files to the machine
-    #   block:
-    #     - name: copy the config files
-    #       copy:
-    #         src: "{{ clone_location }}/config"
-    #         dest: "{{ root_directory }}"
-    #         remote_src: yes
-    #   rescue:
-    #     - name: Removing the repository
-    #       file:
-    #         path: "{{ clone_location }}"
-    #         state: absent
+    # copy the config files to the machine
+    - name: Copy the config files to the machine
+      block:
+        - name: copy the config files
+          copy:
+            src: "{{ clone_location }}/config"
+            dest: "{{ root_directory }}"
+            remote_src: yes
+      rescue:
+        - name: Removing the repository
+          file:
+            path: "{{ clone_location }}"
+            state: absent
 
-    # # remove the cloned repository
-    # - name: Removing the repository
-    #   file:
-    #     path: "{{ clone_location }}"
-    #     state: absent
+    # remove the cloned repository
+    - name: Removing the repository
+      file:
+        path: "{{ clone_location }}"
+        state: absent
 
 
 
