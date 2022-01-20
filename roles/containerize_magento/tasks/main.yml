@@ -9,7 +9,7 @@
         state: latest
 
     - debug:
-        msg: "{{ version }}"
+        msg: "{{ deploy_version }}"
     
     # # clone the repository
     # - name: Cloning the repository

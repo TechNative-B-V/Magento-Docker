@@ -31,6 +31,6 @@
       vars:
         clone_location: "/tmp/magento"
         repository: "https://github.com/ginokok1996/Technative-DevOps-Scripts.git"
-        version: "{{ deploy_version }}"
+        deploy_version: "{{ deploy_version }}"
         root_directory: "{{ root_directory }}"
         dirNames: ['appl', 'apps', 'data', 'config']
