@@ -13,7 +13,7 @@
     private: no
 
   # Retrieve the directory that holds the apps, appl & data folder
-  - name: "root_directory"
+  - name: "directory"
     prompt: "Please provide the directory where Magento's application & data will be stored"
     private: no
 
@@ -33,5 +33,5 @@
       clone_location: "/tmp/magento"
       repository: "https://github.com/ginokok1996/Technative-DevOps-Scripts.git"
       version: "{{ deploy_version }}"
-      root_directory: "{{ root_directory }}"
+      root_directory: "{{ directory }}"
       dirNames: ['appl', 'apps', 'data', 'config']
