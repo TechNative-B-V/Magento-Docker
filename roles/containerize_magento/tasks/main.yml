@@ -52,7 +52,7 @@
 
     # make sure we have the magento application files if the directory is empty
     - name: Retrieve magento application files
-      shell: "composer create-project --no-interaction --repository-url https://repo.magento.com/ magento/project-community-edition /tmp/testing/"
+      shell: "composer create-project --no-interaction --repository-url https://repo.magento.com/ magento/project-community-edition {{ root_directory }}/appl/magento/"
       when: filesFound.matched == 0
 
     # remove the cloned repository
