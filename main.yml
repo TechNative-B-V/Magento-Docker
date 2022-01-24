@@ -7,11 +7,31 @@
   become: true
 
   vars_prompt:
+  # prompt the user if the creation of a partition is required
   - name: "create_partition"
     prompt: "Do you want to create a partition (yes/no)?"
     private: no
 
+  # Retrieve the directory that holds the apps, appl & data folder
+  - name: "directory"
+    prompt: "Please provide the directory where Magento's application & data will be stored"
+    private: no
+
+  # Retrieve what version of the deploy needs to be used (defaults to "main")
+  - name: "deploy_version"
+    prompt: "What version do you want to use? (leave blank for latest)"
+    private: no
+    default: "main"
+
   roles:
     - role: docker_installer
+
     - role: make_partition
       when: create_partition | bool
+
+    - role: containerize_magento
+      clone_location: "/tmp/magento"
+      repository: "https://github.com/TechNative-B-V/Magento-Docker.git"
+      version: "{{ deploy_version }}"
+      root_directory: "{{ directory }}"
+      dirNames: ['appl', 'apps', 'data', 'config']
