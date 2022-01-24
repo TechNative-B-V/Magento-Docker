@@ -37,6 +37,24 @@
             path: "{{ clone_location }}"
             state: absent
 
+    # make sure we have a magento directory in the appl repo
+    - name: Make sure we have a magento application directory
+      file:
+        path: "{{ root_directory }}/appl/magento"
+        state: directory
+        mode: "0755"  
+
+    # check if the directory is empty if so we need to retrieve the files
+    - name: Check if magento application directory is empty
+      find:
+        paths: "{{ root_directory }}/appl/magento"
+      register: filesFound
+
+    # make sure we have the magento application files if the directory is empty
+    - name: Retrieve magento application files
+      shell: "composer create-project --no-interaction --repository-url https://repo.magento.com/ magento/project-community-edition /tmp/testing/"
+      when: filesFound.matched == 0
+
     # remove the cloned repository
     - name: Removing the repository
       file:
