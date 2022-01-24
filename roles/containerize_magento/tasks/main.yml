@@ -37,6 +37,31 @@
             path: "{{ clone_location }}"
             state: absent
 
+    # create the magento network
+    - name: Create magento network network
+      docker_network:
+        name: magento
+
+    - name: Create a mariaDB container
+      docker_container:
+        name: db
+        image: 'mariadb:10.7'
+        ports: 
+          - '3306'
+        env:
+          MYSQL_ROOT_PASSWORD: "magento2"
+          MYSQL_DATABASE: "magento2"
+          MYSQL_USER: "magento2"
+          MYSQL_PASSWORD: "magento2"
+        hostname: "db.magento2.docker"
+        volumes:
+          - "{{ root_directory }}/data/db:/var/lib/mysql"
+          - "{{ root_directory }}/config/mysql/conf.d:/etc/mysql/conf.d"
+        networks:
+          - name: magento
+            aliases:
+              - "db.magento2.docker"
+
     # remove the cloned repository
     - name: Removing the repository
       file:
