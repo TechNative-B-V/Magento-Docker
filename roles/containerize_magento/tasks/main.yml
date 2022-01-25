@@ -80,12 +80,25 @@
             aliases:
               - "db.magento2.docker"
 
+    # create a mailhog container
+    - name: Create a mailhog container
+      docker_container:
+        restart_policy: 'always'
+        name: mail
+        image: 'mailhog/mailhog:latest'
+        ports: 
+          - '1025:1025'
+          - '8025:8025'
+        hostname: "mail.magento2.docker"
+        networks:
+          - name: magento
+            aliases:
+              - "mail.magento2.docker"
+
     # remove the cloned repository
     - name: Removing the repository
       file:
         path: "{{ clone_location }}"
         state: absent
-
-
 
 ...
