@@ -1,0 +1,81 @@
+---
+# This role deploys the magento containers
+
+  # install epel-release
+  - name: Installing epel-release
+    yum:
+      name: epel-release
+      state: present
+
+  # install gpg key
+  - rpm_key:
+      state: present
+      key: https://rpms.remirepo.net/RPM-GPG-KEY-remi
+
+  # install remi repository
+  - name: Installing Remi Repository
+    yum:
+      name: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+      state: present
+
+  # resets yum php module
+  - name: Reset yum php module
+    shell: "yum module reset php -y"
+
+  # enable php 7.4 remi module
+  - name: Enable remi-7.4 module
+    shell: "yum module enable php:remi-7.4 -y"
+
+  # install php
+  - name: Installing php
+    yum:
+      enablerepo: "remi,remi-php74"
+      name:
+      - php
+      - php-common
+      - php-cli
+      - php-intl
+      - php-pdo_mysql
+      - php-openssl
+      - php-soap
+      - php-sockets
+      - php-xsl
+      - php-gd
+      - php-curl
+      - php-mysqlnd
+      - php-fpm
+      - php-mysqli
+      - php-json
+      - php-zip
+      state: latest
+
+  # validate composer checksum
+  - name: Validate Composer checksum
+    get_url:
+      checksum: "sha384:906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8"
+      dest: /usr/src/
+      url: https://getcomposer.org/installer
+
+  # install composer
+  - name: Download and install Composer
+    shell: curl -sS https://getcomposer.org/installer | php
+    args:
+      chdir: /usr/src/
+      creates: /usr/local/bin/composer
+      warn: false
+
+  # add composer to global path
+  - name: Add Composer to global path
+    copy: 
+      dest: /usr/local/bin/composer
+      group: centos
+      mode: '0755'
+      owner: centos
+      src: /usr/src/composer.phar
+      remote_src: yes
+
+  # adds magento repo authentication to auth.json
+  - name: Add magento repo authentication
+    shell: "composer config --global http-basic.repo.magento.com ce7e9740272307af36caad68f054f144 d4975ceefe2051768b2e01b9796f53a0"
+
+...

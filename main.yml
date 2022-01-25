@@ -29,6 +29,8 @@
     - role: make_partition
       when: create_partition | bool
 
+    - role: install_composer
+
     - role: containerize_magento
       clone_location: "/tmp/magento"
       repository: "https://github.com/TechNative-B-V/Magento-Docker.git"
