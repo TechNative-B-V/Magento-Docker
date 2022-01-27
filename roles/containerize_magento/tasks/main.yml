@@ -60,6 +60,7 @@
       docker_network:
         name: magento
 
+    # create the database container
     - name: Create a mariaDB container
       docker_container:
         name: db
@@ -79,6 +80,26 @@
           - name: magento
             aliases:
               - "db.magento2.docker"
+
+    # create the phpmyadmin container
+    - name: Create a phpmyadmin container
+      docker_container:
+        name: phpmyadmin
+        image: 'phpmyadmin/phpmyadmin'
+        ports: 
+          - '8000:80'
+        env:
+          MYSQL_ROOT_PASSWORD: "magento2"
+          MYSQL_USER: "magento2"
+          MYSQL_PASSWORD: "magento2"
+        hostname: "phpmyadmin.magento2.docker"
+        restart_policy: "always"
+        links:
+          - 'db:db'
+        networks:
+          - name: magento
+            aliases:
+              - "phpmyadmin.magento2.docker"
 
     # create a mailhog container
     - name: Create a mailhog container
@@ -108,7 +129,6 @@
           - name: magento
             aliases:
               - "tls.magento2.docker"
-
 
     # remove the cloned repository
     - name: Removing the repository
