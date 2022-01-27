@@ -95,6 +95,21 @@
             aliases:
               - "mail.magento2.docker"
 
+    # create the tls container
+    - name: Create a tls container
+      docker_container:
+        restart_policy: 'always'
+        name: tls
+        image: 'magento/magento-cloud-docker-nginx:1.9-1.2'
+        ports: 
+          - '433:433'
+        hostname: "tls.magento2.docker"
+        networks:
+          - name: magento
+            aliases:
+              - "tls.magento2.docker"
+
+
     # remove the cloned repository
     - name: Removing the repository
       file:
