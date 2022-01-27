@@ -41,8 +41,4 @@
       state: started
       enabled: yes
 
-  # Install the Docker SDK module      
-  - name: Install Docker SDK
-    pip:
-      name: docker
 ...
