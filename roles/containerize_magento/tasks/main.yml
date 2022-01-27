@@ -80,6 +80,21 @@
             aliases:
               - "db.magento2.docker"
 
+    # create a mailhog container
+    - name: Create a mailhog container
+      docker_container:
+        restart_policy: 'always'
+        name: mail
+        image: 'mailhog/mailhog:v1.0.1'
+        ports: 
+          - '1025:1025'
+          - '8025:8025'
+        hostname: "mail.magento2.docker"
+        networks:
+          - name: magento
+            aliases:
+              - "mail.magento2.docker"
+
     # create the tls container
     - name: Create a tls container
       docker_container:
@@ -93,6 +108,7 @@
           - name: magento
             aliases:
               - "tls.magento2.docker"
+
 
     # remove the cloned repository
     - name: Removing the repository
